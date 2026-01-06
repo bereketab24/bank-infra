@@ -1,0 +1,68 @@
+# --- General / OS ---
+.DS_Store
+Thumbs.db
+*.log
+tmp/
+temp/
+
+# --- IDEs / Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- Secrets & Credentials (CRITICAL) ---
+# Never commit unencrypted secrets!
+*.env
+.env.*
+*.pem
+*.key
+*.crt
+*.p12
+id_rsa
+id_rsa.pub
+# Common names for local kubeconfigs
+kubeconfig
+config
+*.kubeconfig
+
+# --- Kubernetes ---
+# If you use 'kubectl proxy' or local dumps
+*.yaml.out
+*.yml.out
+# Crash dumps
+core
+
+# --- Helm ---
+# Ignore downloaded dependencies in chart directories
+charts/
+# Keep Chart.lock unless you prefer to ignore it
+# Chart.lock
+
+# --- Terraform (If used for provisioning) ---
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfplan
+.terraform.lock.hcl
+
+# --- Minikube / Local Dev ---
+# If you use Minikube Docker daemon
+.minikube/
+# Setup scripts output
+setup-output/
+
+# --- Python / Ansible (If used for scripts) ---
+__pycache__/
+*.pyc
+venv/
+.pytest_cache/
+*.retry
+
+# --- Private configs (Optional conventions) ---
+# Ignore files explicitly named 'local' or 'private'
+*local.yaml
+*local.yml
+*private.yaml
+*private.yml
