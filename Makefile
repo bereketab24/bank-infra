@@ -7,6 +7,8 @@ MEMORY := 5240
 CPUS := 2
 DRIVER := docker
 
+APP_NAMESPACES := dev qa staging prod
+TOOL_NAMESPACES := kafka rabbitmq redis postgres monitoring
 # ---Colors for the printing---
 CYAN := \e[36m #36 is the color code for Cyan color
 RESET := \e[0m #0 is the color code to reset into default color
@@ -22,7 +24,7 @@ up: ## Start Minikube
 		@echo -e "$(CYAN)Cluster is up! Switching context with: kubectl config use-context $(CLUSTER_NAME)$(RESET)"
 		kubectl config use-context bank-cluster
 
-bootstrap: ## Install the Platform Tools
+install-argo: ## Install ArgoCD Tools
 		@echo -e "$(CYAN) Adding ArgoCD helm repo$(RESET)"
 		helm repo add argo https://argoproj.github.io/argo-helm
 		helm repo update
@@ -55,6 +57,56 @@ dashboard: ## Open K8s Dashboard
 cluster-info: ## Check the cluster info per cluster name
 		kubectl cluster-info --context $(CLUSTER_NAME)
 
-
-
+create-namespaces: ## Create namespaces to imitate different deployment environments(dev, qa, staging, prod)
+		@echo -e "$(CYAN)Creating app namespaces: $(APP_NAMESPACES)$(RESET)"
+		@for ns in $(APP_NAMESPACES); do \
+			kubectl create namespace $$ns --dry-run=client -o yaml | kubectl apply -f -; \
+		done
+		@echo -e "$(CYAN)Creating tool namespaces: $(TOOL_NAMESPACES)$(RESET)"
+		@for ns in $(TOOL_NAMESPACES); do \
+  			kubectl create namespace $$ns --dry-run=client -o yaml | kubectl apply -f -; \
+  		done
+install-kafka: ## Install shared Kafka using Strimzi Operator i.e managed kafka
+		@echo -e "$(CYAN)Installing Strimzi Kafka Operator...$(RESET)"
+		helm repo add strimzi https://strimzi.io/charts/
+		helm repo update strimzi
+		helm upgrade --install strimzi strimzi/strimzi-kafka-operator \
+				--namespace kafka \
+				--create-namespace \
+				--set watchAnyNamespace=true \
+				--wait
+install-rabbitmq: ## Install shared RabbitMQ
+		@echo -e "$(CYAN)Installing RabbitMQ...$(RESET)"
+		helm repo add bitnami https://charts.bitnami.com/bitnami
+		helm repo update bitnami
+		helm upgrade --install rabbitmq bitnami/rabbitmq \
+				--namespace rabbitmq \
+				--create-namespace \
+				--wait
+install-redis: ## Install shared Redis
+		@echo -e "$(CYAN)Installing Redis...$(RESET)"
+		helm repo add bitnami https://charts.bitnami.com/bitnami
+		helm repo update bitnami
+		helm upgrade --install redis bitnami/redis \
+				--namespace redis \
+				--create-namespace \
+				--wait
+install-postgres: ## Install shared Postgres Operator
+		@echo -e "$(CYAN)Installing Postgres Operator...$(RESET)"
+		helm repo add postgres-operator https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+		helm repo update postgres-operator
+		helm upgrade --install postgres-operator postgres-operator/postgres-operator \
+				--namespace postgres \
+				--create-namespace \
+				--wait
+install-monitoring: ## Install Prometheus and Grafana
+		@echo -e "$(CYAN)Installing Prometheus and Grafana via kube-prometheus-stack...$(RESET)"
+		helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+		helm repo update
+		helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+				--namespace monitoring \
+				--create-namespace \
+				--values 00-tooling/monitoring/values.yaml \
+				--wait
+bootstrap: create-namespaces install-argo install-kafka install-rabbitmq install-redis install-postgres install-monitoring ## Install the entire tools in the cluster
 
