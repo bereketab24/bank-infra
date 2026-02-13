@@ -35,7 +35,7 @@ bootstrap: ## Install the Platform Tools
 		@kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo ""
 
 access-argo: ## Create a tunnel connection to ArgoCD to access the dashboard
-		@echo -e "$(CYAN)Opening tunnel to ArgoCD at https://localhost:8085$(RESET)"
+		@echo -e "$(CYAN)Opening tunnel to ArgoCD at http://localhost:8085$(RESET)"
 		kubectl port-forward svc/argocd-server -n argocd 8085:443
 
 down: ## Stop cluster for freeing up RAM without losing the cluster
