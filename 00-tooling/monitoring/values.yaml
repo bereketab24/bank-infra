@@ -1,0 +1,13 @@
+grafana:
+  enabled: true
+  adminPassword: admin  # Change in secrets for prod
+prometheus:
+  server:
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+alertmanager:
+  enabled: false  # Enable later for alerts
+kube-state-metrics:
+  enabled: true
