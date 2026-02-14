@@ -1,0 +1,120 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: bank-kafka
+  namespace: kafka
+  annotations:
+    strimzi.io/kraft: "enabled" #enabling Kraft instead of Zookeeper
+    strimzi.io/node-pools: "enabled" #node-pools are like connection pools but for Kafka instances, it's crucial given that the way Kraft works.
+spec:
+  kafka:
+    version: 3.7.0
+    metadataVersion: 3.7-IV4
+
+
+    listeners:
+#    Listener port for the apps i.e. Producer/Consumer
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+#    This is for nodes to vote(prior zookeeper's job)
+      - name: controller
+        port: 9093
+        type: internal
+        tls: false
+        configuration:
+          useAsKraftController: true
+
+    config:
+      offsets.topic.replication.factor: 1
+      transaction.state.log.replication.factor: 1
+      transaction.state.log.min.isr: 1
+      default.replication.factor: 1
+      min.insync.replicas: 1
+
+  entityOperator:
+    topicOperator: {} #this applies the topics we define below into the Kafka broker. (from the Strimzi Operator)
+    userOperator: {}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+#  we are assigning both broker and Kraft role for one instance of Kafka since we got limited resources.
+  name: dual-role
+  namespace: kafka
+  labels:
+#    this links the pool to the cluster above
+    strimzi.io/cluster: bank-kafka
+spec:
+  replicas: 1
+  roles:
+    - controller
+    - broker
+  storage:
+    type: ephemeral #change this to 'jbod' in prod to have persistence storage.
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: kyc-approved
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: bank-kafka
+spec:
+  partitions: 3
+  replicas: 1
+  config:
+    retention.ms: 604800000 #7 days
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payment-init
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: bank-kafka
+spec:
+  partition: 3
+  replicas: 1
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: account-created
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: bank-kafka
+spec:
+  partition: 3
+  replicas: 1
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payment-completed
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: bank-kafka
+spec:
+  partition: 3
+  replica: 1
+  config:
+    retention.ms: 604800000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: payment-failed
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: bank-kafka
+spec:
+  partition: 3
+  replica: 1
+  config:
+    retention.ms: 604800000

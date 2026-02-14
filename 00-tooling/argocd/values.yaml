@@ -1,3 +1,10 @@
 server:
-  extraArgs:
-    - --insecure
+  ingress:
+    enabled: false #disable creating ingress resource since we are running locally, we can access ArgoCD server via port-forward
+
+rbac:
+  create: true
+
+configs:
+  cm:
+    application.resourceTrackingMethod: annotation #Use the 'annotation' instead of the default 'Labels' in order to avoid collision with other resources that are created other than ArgoCD
