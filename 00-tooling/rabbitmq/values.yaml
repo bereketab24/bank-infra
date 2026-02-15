@@ -1,0 +1,13 @@
+auth:
+  username: guest
+  password: guest #use k8s secret in prod
+replicaCount: 1
+persistence:
+  enabled: true
+  storageClass: ""
+  size: 1Gi
+extraConfiguration: |
+  load_definitions = /app/load_definitions.json
+extraSecrets: {}
+metrics:
+  enabled: true
