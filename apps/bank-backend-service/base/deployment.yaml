@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-backend-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-bff
+  template:
+    metadata:
+      labels:
+        app: bank-bff
+    spec:
+      containers:
+        - name: bank-bff
+          image: bereketab24/bank-bff:v0.0.1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: bank-kafka-kafka-bootstrap.kafka.svc:9092
+            - name: REDIS_HOST
+              value: redis-master.redis.svc
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
