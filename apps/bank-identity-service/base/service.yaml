@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-identity
+spec:
+  selector:
+    app: bank-identity
+  ports:
+    - port: 8080
+      targetPort: 8080

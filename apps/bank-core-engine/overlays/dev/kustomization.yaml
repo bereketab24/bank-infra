@@ -21,7 +21,7 @@ patches:
                   requests:
                     cpu: 100m
                     memory: 128Mi
-              - env:
+                env:
                   - name: SPRING_PROFILES_ACTIVE
                     value: dev
   - target:

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-identity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-identity
+  template:
+    metadata:
+      labels:
+        app: bank-identity
+    spec:
+      containers:
+        - name: bank-identity
+          image: bereketab24/bank-identity:v0.0.1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_URL
+              value: jdbc:postgresql://user-db-primary:5432/user-db
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: bank-kafka-kafka-bootstrap.kafka.svc:9092
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: actuator/health/liveness
+              port: 8080
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: actuator/health/readiness
+
+
