@@ -31,5 +31,5 @@ spec:
                   storage: 1Gi
   users:
     - name: ledger
-      databases: [ledgerdb]
+      databases: [ledger-db]
       options: "SUPERUSER"

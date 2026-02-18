@@ -31,5 +31,5 @@ spec:
                   storage: 1Gi
   users:
     - name: identity
-      database: [userdb]
+      database: [user-db]
       options: "SUPERUSER"

@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bank-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/identity
+            pathType: Prefix
+            backend:
+              service:
+                name: bank-identity
+                port:
+                  number: 8080
+
+          - path: /api/bank-core
+            pathType: Prefix
+            backend:
+              service:
+                name: bank-core
+                port:
+                  number: 8080
+
+          - path: /api/bank-bff
+            pathType: Prefix
+            backend:
+              service:
+                name: bank-bff
+                port:
+                  number: 8080
+
