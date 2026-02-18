@@ -1,0 +1,11 @@
+repoURL: https://github.com/bereketab24/bank-infra.git
+
+services:
+  - bank-identity-service
+  - bank-backend-service
+  - bank-core-engine
+  - bank-ingress
+
+environments:
+  - dev
+

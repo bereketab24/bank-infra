@@ -1,0 +1,6 @@
+apiVersion: v2
+name: bank-argocd-apps
+description: App of Apps for Banking platform
+type: application
+version: 0.0.1
+appVersion: "1.0"

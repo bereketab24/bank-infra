@@ -1,0 +1,29 @@
+{{- range $env := .Values.environments }}
+{{- range $service := .Values.services }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{$service}}-{{$env}}
+  namespace: argocd
+  labels:
+    service: {{$service}}
+    env: {{$env}}
+spec:
+  project: default
+  source:
+    repoURL: {{$.Values.repoURL}}
+    targetRevision: HEAD
+    path: apps/{{$service}}/overlays/{{$env}}
+    kustomize: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{$env}}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
+      - RespectIgnoreDifferences=true
+  {{- end}}
+  {{- end}}
