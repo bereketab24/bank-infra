@@ -17,6 +17,15 @@ controller:
     - docker-workflow:latest
     - gradle:latest
     - configuration-as-code:latest
+  initContainers:
+    - name: volume-permissions-fix
+      image: busybox:latest
+      command: ["sh", "-c", "chown -R 1000:1000 /var/jenkins_home"]
+      securityContext:
+        runAsUser: 0
+      volumeMounts:
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
 persistence:
   enabled: true
   storageClass: jenkins-pv

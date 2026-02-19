@@ -74,6 +74,7 @@ install-kafka: ## Install shared Kafka using Strimzi Operator i.e managed kafka
 				--namespace kafka \
 				--create-namespace \
 				--set watchAnyNamespace=true \
+				--values 00-tooling/kafka/values.yaml \
 				--wait
 install-rabbitmq: ## Install shared RabbitMQ
 		@echo -e "$(CYAN)Installing RabbitMQ...$(RESET)"
@@ -82,6 +83,7 @@ install-rabbitmq: ## Install shared RabbitMQ
 		helm upgrade --install rabbitmq bitnami/rabbitmq \
 				--namespace rabbitmq \
 				--create-namespace \
+				--values 00-tooling/rabbitmq/values.yaml \
 				--wait
 install-redis: ## Install shared Redis
 		@echo -e "$(CYAN)Installing Redis...$(RESET)"
@@ -90,6 +92,7 @@ install-redis: ## Install shared Redis
 		helm upgrade --install redis bitnami/redis \
 				--namespace redis \
 				--create-namespace \
+				--values 00-tooling/redis/values.yaml \
 				--wait
 install-postgres: ## Install shared Postgres Operator
 		@echo -e "$(CYAN)Installing Postgres Operator...$(RESET)"
@@ -98,6 +101,7 @@ install-postgres: ## Install shared Postgres Operator
 		helm upgrade --install postgres-operator postgres-operator/postgres-operator \
 				--namespace postgres \
 				--create-namespace \
+				--values 00-tooling/postgres/values.yaml \
 				--wait
 install-monitoring: ## Install Prometheus and Grafana
 		@echo -e "$(CYAN)Installing Prometheus and Grafana via kube-prometheus-stack...$(RESET)"
@@ -130,3 +134,4 @@ access-grafana: ##Open Grafana UI
 
 bootstrap: create-namespaces install-argo install-kafka install-redis install-postgres install-monitoring install-jenkins## Install the entire tools in the cluster
 
+bootstrap-gitops: create-namespaces install-argo ## Kickoff the cluster in GitOps way
