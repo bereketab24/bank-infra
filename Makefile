@@ -35,7 +35,9 @@ install-argo: ## Install ArgoCD Tools
 		kubectl wait --for=condition=available --timeout=300s deployment/argocd-server -n argocd
 		@echo -e "$(CYAN) ArgoCD is ready, the password is: $(RESET)"
 		@kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo ""
-
+		@echo -e "$(CYAN)Installing the App-of-Apps chart (this creates all tool & service Applications)...$(RESET)"
+		helm upgrade --install bank-argocd-apps ./argocd-apps --namespace argocd --values argocd-apps/values.yaml
+		@echo -e "$(CYAN)ArgoCD is now fully in control. Open UI with: make access-argo$(RESET)"
 access-argo: ## Create a tunnel connection to ArgoCD to access the dashboard
 		@echo -e "$(CYAN)Opening tunnel to ArgoCD at http://localhost:8085$(RESET)"
 		kubectl port-forward svc/argocd-server -n argocd 8085:443

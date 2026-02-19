@@ -1,21 +1,64 @@
+{{- range $tool := .Values.helmTools}}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bank-tooling
+  name: bank-tool-{{$tool.name}}
   namespace: argocd
+  labels:
+    component: tooling
+    type: helm
 spec:
   project: default
-  source:
-    repoURL: {{.Values.repoURL}}
-    targetRevision: HEAD
-    path: 00-tooling
-    directory:
-      recurse: true
+  sources:
+    - repoURL: {{$tool.repoURL}}
+      chart: {{$tool.chart}}
+      targetRevision: {{$tool.targetRevision}}
+      helm:
+        releaseName: {{$tool.releaseName}}
+        valueFiles:
+          - $values/00-tooling/{{$tool.name}}/{{$tool.valuesFile}}
+    - repoURL: {{$.Values.repoURL}}
+      targetRevision: HEAD
+      ref: values
   destination:
     server: https://kubernetes.default.svc
+    namespace: {{$tool.namespace}}
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+  syncWave: 5
+  {{- end}}
+
+  {{- range $cr := .Values.crTools }}
+  ---
+  apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: bank-tool-{{ $cr.name }}-crs
+    namespace: argocd
+    labels:
+      component: tooling
+      type: cr
+  spec:
+    project: default
+    source:
+      repoURL: {{ $.Values.repoURL }}
+      targetRevision: HEAD
+      path: {{ $cr.path }}
+      kustomize: { }
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: {{ $cr.namespace }}
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+        - CreateNamespace=true
+    syncWave: 10   # CRs after operators
+  {{- end }}

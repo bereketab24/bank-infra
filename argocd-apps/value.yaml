@@ -9,3 +9,62 @@ services:
 environments:
   - dev
 
+helmTools:
+  - name: kafka
+    repoURL: https://strimzi.io/charts/
+    chart: strimzi-kafka-operator
+    targetRevision: "0.42.0"          # pinned for robustness (update when you want)
+    releaseName: strimzi
+    namespace: kafka
+    valuesFile: values.yaml
+
+  - name: rabbitmq
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: rabbitmq
+    targetRevision: "14.0.0"
+    releaseName: rabbitmq
+    namespace: rabbitmq
+    valuesFile: values.yaml
+
+  - name: redis
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: redis
+    targetRevision: "20.0.0"
+    releaseName: redis
+    namespace: redis
+    valuesFile: values.yaml
+
+  - name: postgres-operator
+    repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+    chart: postgres-operator
+    targetRevision: "1.12.0"
+    releaseName: postgres-operator
+    namespace: postgres
+    valuesFile: values.yaml
+
+  - name: monitoring
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: "68.0.0"
+    releaseName: monitoring
+    namespace: monitoring
+    valuesFile: values.yaml
+
+  - name: jenkins
+    repoURL: https://charts.jenkins.io
+    chart: jenkins
+    targetRevision: "5.0.0"
+    releaseName: jenkins
+    namespace: jenkins
+    valuesFile: values.yaml
+
+crTools:   # CRs that must be applied AFTER their operator
+  - name: kafka
+    path: 00-tooling/kafka
+    namespace: kafka
+  - name: postgres
+    path: 00-tooling/postgres
+    namespace: postgres
+  - name: jenkins-config
+    path: 00-tooling/jenkins
+    namespace: jenkins
