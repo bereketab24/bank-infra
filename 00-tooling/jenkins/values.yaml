@@ -1,0 +1,26 @@
+controller:
+  serviceType: NodePort
+  servicePort: 8080
+  nodePort: 32000
+  resources:
+    limits:
+      cpu: 600m
+      memory: 1200Mi
+    requests:
+      cpu: 300m
+      memory: 768Mi
+  installPlugins:
+    - kubernetes:latest
+    - workflow-aggregator:latest
+    - git:latest
+    - pipeline-stage-view:latest
+    - docker-workflow:latest
+    - gradle:latest
+    - configuration-as-code:latest
+persistence:
+  enabled: true
+  storageClass: jenkins-pv
+  size: 3Gi
+serviceAccount:
+  create: false
+  name: jenkins

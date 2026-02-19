@@ -8,7 +8,7 @@ CPUS := 2
 DRIVER := docker
 
 APP_NAMESPACES := dev qa staging prod
-TOOL_NAMESPACES := kafka rabbitmq redis postgres monitoring
+TOOL_NAMESPACES := kafka rabbitmq redis postgres monitoring jenkins
 # ---Colors for the printing---
 CYAN := \e[36m #36 is the color code for Cyan color
 RESET := \e[0m #0 is the color code to reset into default color
@@ -108,5 +108,25 @@ install-monitoring: ## Install Prometheus and Grafana
 				--create-namespace \
 				--values 00-tooling/monitoring/values.yaml \
 				--wait
-bootstrap: create-namespaces install-argo install-kafka install-rabbitmq install-redis install-postgres install-monitoring ## Install the entire tools in the cluster
+install-jenkins: ## Install Jenkins
+		@echo -e "$(CYAN)Installing Jenkins and Applying PV and SA...$(RESET)"
+		kubectl apply -f 00-tooling/jenkins/pv.yaml
+		kubectl apply -f 00-tooling/jenkins/sa.yaml
+		minikube ssh "sudo mkdir -p /data/jenkins-volume/ && sudo chown -R 1000:1000 /data/jenkins-volume/"
+		helm repo add jenkinsci https://charts.jenkins.io
+		helm repo update
+		helm upgrade --install jenkins jenkinsci/jenkins \
+				--namespace jenkins \
+				-- values 00-tooling/jenkins/values.yaml \
+				--wait
+access-jenkins: ##Open Jenkins via NodePort
+		@echo -e "$(CYAN)Jenkins available at http://$(minikube ip):32000$(RESET)"
+		@echo -e "$(CYAN)Admin password: $(RESET)"
+		@kubectl get secret -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 -d && echo ""
+access-grafana: ##Open Grafana UI
+		@export POD_NAME=$(kubectl --namespace monitoring get pod -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=monitoring" -oname)
+		kubectl --namespace monitoring port-forward $POD_NAME 3000
+		kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo
+
+bootstrap: create-namespaces install-argo install-kafka install-redis install-postgres install-monitoring install-jenkins## Install the entire tools in the cluster
 
