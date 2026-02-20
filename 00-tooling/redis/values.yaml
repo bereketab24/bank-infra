@@ -5,7 +5,7 @@ auth:
 image:
   registry: docker.io
   repository: bitnami/redis
-  digest: sha256-2e17cd143c4c4f14ac8f4515674d2e65d5d475701ea43549b51981afbaf36058
+  tag: sha256-2e17cd143c4c4f14ac8f4515674d2e65d5d475701ea43549b51981afbaf36058
 master:
   persistence:
     size: 1Gi
@@ -18,4 +18,4 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    digest: sha256-3adb54d7cbe145d1d837491afb8c68c2b575d9285e38909753115ef46ebc6971
+    tag: sha256-3adb54d7cbe145d1d837491afb8c68c2b575d9285e38909753115ef46ebc6971
