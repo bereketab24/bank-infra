@@ -4,7 +4,7 @@ auth:
 replicaCount: 1
 persistence:
   enabled: true
-  storageClass: ""
+  storageClass: "standard"
   size: 1Gi
 extraConfiguration: |
   load_definitions = /app/load_definitions.json
