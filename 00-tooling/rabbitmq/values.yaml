@@ -11,8 +11,8 @@ persistence:
   enabled: true
   storageClass: "standard"
   size: 1Gi
-extraConfiguration: |
-  load_definitions = /app/load_definitions.json
+#extraConfiguration: |
+#  load_definitions = /app/load_definitions.json
 extraSecrets: {}
 metrics:
   enabled: true
