@@ -8,6 +8,8 @@ metadata:
   labels:
     component: tooling
     type: helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: default
   sources:
@@ -31,34 +33,34 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
-  syncWave: 5
-  {{- end}}
+{{- end}}
 
-  {{- range $cr := .Values.crTools }}
-  ---
-  apiVersion: argoproj.io/v1alpha1
-  kind: Application
-  metadata:
-    name: bank-tool-{{ $cr.name }}-crs
-    namespace: argocd
-    labels:
-      component: tooling
-      type: cr
-  spec:
-    project: default
-    source:
-      repoURL: {{ $.Values.repoURL }}
-      targetRevision: HEAD
-      path: {{ $cr.path }}
-      kustomize: { }
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: {{ $cr.namespace }}
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      syncOptions:
-        - CreateNamespace=true
-    syncWave: 10   # CRs after operators
-  {{- end }}
+{{- range $cr := .Values.crTools }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bank-tool-{{ $cr.name }}-crs
+  namespace: argocd
+  labels:
+    component: tooling
+    type: cr
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  project: default
+  source:
+    repoURL: {{ $.Values.repoURL }}
+    targetRevision: HEAD
+    path: {{ $cr.path }}
+    kustomize: { }
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ $cr.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}
