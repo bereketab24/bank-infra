@@ -1,6 +1,11 @@
 auth:
   username: guest
   password: guest #use k8s secret in prod
+
+image:
+  registry: docker.io
+  repository: bitnami/rabbitmq
+  tag: 3.13
 replicaCount: 1
 persistence:
   enabled: true
