@@ -4,8 +4,8 @@ auth:
   password: redis-password # secret in prod
 image:
   registry: docker.io
-  repository: bitnami/redis
-  tag: sha256-2e17cd143c4c4f14ac8f4515674d2e65d5d475701ea43549b51981afbaf36058
+  repository: bitnamilegacy/redis
+  tag: 8.2.1-debian-12-r0
 master:
   persistence:
     size: 1Gi
@@ -17,5 +17,5 @@ metrics:
   enabled: true
   image:
     registry: docker.io
-    repository: bitnami/redis-exporter
-    tag: sha256-3adb54d7cbe145d1d837491afb8c68c2b575d9285e38909753115ef46ebc6971
+    repository: bitnamilegacy/redis-exporter
+    tag: 1.76.0-debian-12-r0
