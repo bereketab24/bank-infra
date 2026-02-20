@@ -5,7 +5,7 @@ auth:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.13
+  tag: latest
 replicaCount: 1
 persistence:
   enabled: true
