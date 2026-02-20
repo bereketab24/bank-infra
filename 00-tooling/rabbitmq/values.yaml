@@ -16,3 +16,6 @@ persistence:
 extraSecrets: {}
 metrics:
   enabled: true
+extraEnvVars:
+  - name: BITNAMI_DEBUG
+    value: "true"
