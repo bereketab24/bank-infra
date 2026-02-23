@@ -23,8 +23,6 @@ spec:
         port: 9093
         type: internal
         tls: false
-        configuration:
-          useAsKraftController: true
 
     config:
       offsets.topic.replication.factor: 1
