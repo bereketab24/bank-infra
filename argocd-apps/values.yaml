@@ -10,12 +10,13 @@ environments:
   - dev
 
 helmTools:
-  - name: kafka
-    repoURL: https://strimzi.io/charts/
-    chart: strimzi-kafka-operator
-    targetRevision: "0.42.0"
-    releaseName: strimzi
-    namespace: kafka
+
+  - name: jenkins
+    repoURL: https://charts.jenkins.io
+    chart: jenkins
+    targetRevision: "5.0.0"
+    releaseName: jenkins
+    namespace: jenkins
     valuesFile: values.yaml
 
   - name: rabbitmq
@@ -34,13 +35,6 @@ helmTools:
     namespace: redis
     valuesFile: values.yaml
 
-  - name: postgres-operator
-    repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
-    chart: postgres-operator
-    targetRevision: "1.12.0"
-    releaseName: postgres-operator
-    namespace: postgres
-    valuesFile: values.yaml
 
   - name: monitoring
     repoURL: https://prometheus-community.github.io/helm-charts
@@ -50,13 +44,7 @@ helmTools:
     namespace: monitoring
     valuesFile: values.yaml
 
-  - name: jenkins
-    repoURL: https://charts.jenkins.io
-    chart: jenkins
-    targetRevision: "5.0.0"
-    releaseName: jenkins
-    namespace: jenkins
-    valuesFile: values.yaml
+
 
 crTools:   # CRs that must be applied AFTER their operator
   - name: kafka
@@ -68,3 +56,19 @@ crTools:   # CRs that must be applied AFTER their operator
   - name: jenkins-config
     path: 00-tooling/jenkins
     namespace: jenkins
+
+opsTools:
+  - name: kafka
+    repoURL: https://strimzi.io/charts/
+    chart: strimzi-kafka-operator
+    targetRevision: "0.50.1"
+    releaseName: strimzi
+    namespace: kafka
+
+
+  - name: postgres-operator
+    repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+    chart: postgres-operator
+    targetRevision: "1.12.0"
+    releaseName: postgres-operator
+    namespace: postgres

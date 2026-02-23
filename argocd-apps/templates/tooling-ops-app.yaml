@@ -1,0 +1,32 @@
+{{- range $tool := .Values.opsTools}}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bank-tool-{{$tool.name}}
+  namespace: argocd
+  labels:
+    component: ops-tooling
+    type: operators
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  project: default
+  sources:
+    - repoURL: {{$tool.repoURL}}
+      chart: {{$tool.chart}}
+      targetRevision: {{$tool.targetRevision}}
+    - repoURL: {{$.Values.repoURL}}
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{$tool.namespace}}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+{{- end}}
