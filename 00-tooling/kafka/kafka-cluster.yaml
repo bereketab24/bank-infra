@@ -9,7 +9,7 @@ metadata:
 spec:
   kafka:
     version: 4.1.1
-    metadataVersion: 4.1-IV4
+    metadataVersion: "4.1"
 
 
     listeners:
