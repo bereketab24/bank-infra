@@ -75,7 +75,7 @@ metadata:
   labels:
     strimzi.io/cluster: bank-kafka
 spec:
-  partition: 3
+  partitions: 3
   replicas: 1
   config:
     retention.ms: 604800000
@@ -88,7 +88,7 @@ metadata:
   labels:
     strimzi.io/cluster: bank-kafka
 spec:
-  partition: 3
+  partitions: 3
   replicas: 1
   config:
     retention.ms: 604800000
@@ -101,8 +101,8 @@ metadata:
   labels:
     strimzi.io/cluster: bank-kafka
 spec:
-  partition: 3
-  replica: 1
+  partitions: 3
+  replicas: 1
   config:
     retention.ms: 604800000
 ---
@@ -114,7 +114,7 @@ metadata:
   labels:
     strimzi.io/cluster: bank-kafka
 spec:
-  partition: 3
-  replica: 1
+  partitions: 3
+  replicas: 1
   config:
     retention.ms: 604800000
