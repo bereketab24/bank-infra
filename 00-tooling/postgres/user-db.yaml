@@ -1,4 +1,4 @@
-apiVersion: Postgres-operator.crunchydata.com/v1beta1
+apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
   name: user-db
@@ -13,7 +13,7 @@ spec:
         limits:
           cpu: 500m
           memory: 512Mi
-      volumeClaimSpec:
+      dataVolumeClaimSpec:
         accessModes: [ReadWriteOnce]
         resources:
           requests:
