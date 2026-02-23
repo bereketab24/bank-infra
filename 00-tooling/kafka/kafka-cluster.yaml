@@ -8,8 +8,8 @@ metadata:
     strimzi.io/node-pools: "enabled" #node-pools are like connection pools but for Kafka instances, it's crucial given that the way Kraft works.
 spec:
   kafka:
-    version: 3.7.0
-    metadataVersion: 3.7-IV4
+    version: 4.1.1
+    metadataVersion: 4.1-IV4
 
 
     listeners:
