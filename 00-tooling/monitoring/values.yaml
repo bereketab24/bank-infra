@@ -11,3 +11,7 @@ alertmanager:
   enabled: false  # Enable later for alerts
 kube-state-metrics:
   enabled: true
+#disabling the TLS requirement between K8s API server and Prometheus Operator
+prometheusOperator:
+  admissionWebhooks:
+    enabled: false
