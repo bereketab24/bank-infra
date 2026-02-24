@@ -5,6 +5,9 @@ resources:
 namespace: dev
 
 patches:
+  - target:
+        kind: Deployment
+        name: bank-identity
   - patch: |-
       apiVersion: apps/v1
       kind: Deployment
@@ -23,6 +26,3 @@ patches:
                 env:
                   - name: SPRING_PROFILES_ACTIVE
                     value: dev
-  - target:
-      kind: Deployment
-      name: bank-identity

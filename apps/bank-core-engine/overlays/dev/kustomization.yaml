@@ -6,7 +6,10 @@ resources:
 namespace: dev
 
 patches:
-  - patch: |-
+  - target:
+        kind: Deployment
+        name: bank-core
+    patch: |-
       apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -24,6 +27,3 @@ patches:
                 env:
                   - name: SPRING_PROFILES_ACTIVE
                     value: dev
-  - target:
-      kind: Deployment
-      name: bank-core
