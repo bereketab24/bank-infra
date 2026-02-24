@@ -2,6 +2,10 @@ controller:
   serviceType: NodePort
   servicePort: 8080
   nodePort: 32000
+  image:
+    registry: docker.io
+    repository: jenkins/jenkins
+    tag: 2.552
   resources:
     limits:
       cpu: 600m
@@ -17,15 +21,7 @@ controller:
     - docker-workflow:latest
     - gradle:latest
     - configuration-as-code:latest
-  initContainers:
-    - name: volume-permissions-fix
-      image: busybox:latest
-      command: ["sh", "-c", "chown -R 1000:1000 /var/jenkins_home"]
-      securityContext:
-        runAsUser: 0
-      volumeMounts:
-        - name: jenkins-home
-          mountPath: /var/jenkins_home
+#If you are having an issue with permission and volume mounting, SSH manually in the Minikube to create the volume.
 persistence:
   enabled: true
   storageClass: jenkins-pv
