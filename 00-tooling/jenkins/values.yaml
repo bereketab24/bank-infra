@@ -10,7 +10,11 @@ controller:
     startupProbe:
       initialDelaySeconds: 60
       periodSeconds: 10
+      timeoutSeconds: 15
       failureThreshold: 30
+  csrf:
+    defaultCrumbIssuer:
+      enabled: false
   resources:
     limits:
       cpu: 600m
