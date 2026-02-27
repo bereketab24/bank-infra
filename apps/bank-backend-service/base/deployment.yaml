@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bank-bff
-          image: bereketab24/bank-bff:v0.0.1
+          image: bereketab24/bank-bff:v0.0.2
           ports:
             - containerPort: 8080
           env:
