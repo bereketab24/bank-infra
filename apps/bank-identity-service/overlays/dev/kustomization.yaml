@@ -26,3 +26,9 @@ patches:
                 env:
                   - name: SPRING_PROFILES_ACTIVE
                     value: dev
+                  - name: SPRING_DATASOURCE_URL
+                    value: jdbc:postgresql://user-db-primary.postgres.svc:5432/user-db
+                  - name: SPRING_DATASOURCE_USERNAME
+                    value: identity
+                  - name: SPRING_DATASOURCE_PASSWORD
+                    value: C)3e{Q[hMZvo/KWvL.n[rfLH
