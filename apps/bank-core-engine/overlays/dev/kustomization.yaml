@@ -27,3 +27,9 @@ patches:
                 env:
                   - name: SPRING_PROFILES_ACTIVE
                     value: dev
+                  - name: SPRING_DATASOURCE_URL
+                    valueFrom:
+                      secretKeyRef:
+                        name: ledger-db-pguser-ledger
+                        key: jdbc-uri
+                    
