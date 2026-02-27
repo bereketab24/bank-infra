@@ -24,12 +24,14 @@ patches:
                   requests:
                     cpu: 100m
                     memory: 128Mi
+      #  Hardcoding the credentials for the sake of developing speed. I will create a dedicated secret manager later.
                 env:
                   - name: SPRING_PROFILES_ACTIVE
                     value: dev
                   - name: SPRING_DATASOURCE_URL
-                    valueFrom:
-                      secretKeyRef:
-                        name: ledger-db-pguser-ledger
-                        key: jdbc-uri
+                    value: jdbc:postgresql://ledger-db-primary.postgres.svc:5432/ledger-db
+                  - name: SPRING_DATASOURCE_USERNAME
+                    value: ledger
+                  - name: SPRING_DATASOURCE_PASSWORD
+                    value: OvY;T48/U1e>MU2|8Qp[l)7(
                     

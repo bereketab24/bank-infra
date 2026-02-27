@@ -13,7 +13,7 @@ TOOL_NAMESPACES := kafka rabbitmq redis postgres monitoring jenkins
 CYAN := \e[36m #36 is the color code for Cyan color
 RESET := \e[0m #0 is the color code to reset into default color
 
-.PHONY: help up bootstrap access-argo down clean status dashboard cluster-info
+.PHONY: help up bootstrap access-argo down clean status dashboard cluster-info access-grafana
 
 help: ## Show this help message
 		@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -137,3 +137,18 @@ access-grafana: ##Open Grafana UI
 bootstrap: create-namespaces install-argo install-kafka install-redis install-postgres install-monitoring install-jenkins## Install the entire tools in the cluster
 
 bootstrap-gitops: create-namespaces install-argo ## Kickoff the cluster in GitOps way
+
+postgres-cred: ## Get Postgres DBs credentials
+		@echo "$(CYAN)Getting DBs cred for both user and ledger db...$(RESET)"
+		@echo "$(CYAN) URL(ledger-db): $(RESET)"
+		@kubectl get secret ledger-db-pguser-ledger -n postgres -o jsonpath='{.data.jdbc-uri}' | base64 -d && echo
+		@echo "$(CYAN) Username(ledger-db): $(RESET)"
+		@kubectl get secret ledger-db-pguser-ledger -n postgres -o jsonpath='{.data.user}' | base64 -d && echo
+		@echo "$(CYAN) Password(ledger-db): $(RESET)"
+		@kubectl get secret ledger-db-pguser-ledger -n postgres -o jsonpath='{.data.password}' | base64 -d && echo
+		@echo "$(CYAN) URL(user-db): $(RESET)"
+		@kubectl get secret user-db-pguser-identity -n postgres -o jsonpath='{.data.jdbc-uri}' | base64 -d && echo
+		@echo "$(CYAN) Username(user-db): $(RESET)"
+		@kubectl get secret user-db-pguser-identity -n postgres -o jsonpath='{.data.user}' | base64 -d && echo
+		@echo "$(CYAN) Password(user-db): $(RESET)"
+		@kubectl get secret user-db-pguser-identity -n postgres -o jsonpath='{.data.password}' | base64 -d && echo
