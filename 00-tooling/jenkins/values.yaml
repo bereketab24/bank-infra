@@ -32,7 +32,11 @@ controller:
     - docker-workflow:latest
     - gradle:latest
     - configuration-as-code:latest
-#If you are having an issue with permission and volume mounting, SSH manually in the Minikube to create the volume.
+#If you are having an issue with permission and volume mounting, SSH manually in the Minikube to create the volume. Use the following command:
+
+# minikube -p bank-cluster ssh
+# sudo chown -R 1000:1000 /data/jenkins-volume
+# exit
 persistence:
   enabled: true
   storageClass: jenkins-pv
