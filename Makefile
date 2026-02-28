@@ -19,10 +19,12 @@ help: ## Show this help message
 		@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 up: ## Start Minikube
-		@printf "%b\n" "$(CYAN)Starting Minikube Cluster '$(CLUSTER_NAME)'...$(RESET)"
-		@minikube start --profile $(CLUSTER_NAME) --driver $(DRIVER) --memory $(MEMORY) --cpus $(CPUS) --addons ingress --addons metrics-server --addons dashboard
-		@printf "%b\n" "$(CYAN)Cluster is up! Switching context with: kubectl config use-context $(CLUSTER_NAME)$(RESET)"
-		kubectl config use-context bank-cluster
+	@printf "%b\n" "$(CYAN)Starting Minikube Cluster '$(CLUSTER_NAME)'...$(RESET)"
+	@minikube start --profile $(CLUSTER_NAME) --driver $(DRIVER) --memory $(MEMORY) --cpus $(CPUS) --addons ingress --addons metrics-server --addons dashboard
+	@printf "%b\n" "$(CYAN)Provisioning Jenkins HostPath Volume permissions...$(RESET)"
+	@minikube ssh -p $(CLUSTER_NAME) "sudo mkdir -p /data/jenkins-volume && sudo chown -R 1000:1000 /data/jenkins-volume"
+	@printf "%b\n" "$(CYAN)Cluster is up! Switching context with: kubectl config use-context $(CLUSTER_NAME)$(RESET)"
+	@kubectl config use-context $(CLUSTER_NAME)
 
 install-argo: ## Install ArgoCD Tools
 		@printf "%b\n" "$(CYAN) Adding ArgoCD helm repo$(RESET)"
