@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bank-core
-          image: bereketab24/bank-core:v0.0.2
+          image: bereketab24/bank-core:v.0.0.2
           ports:
             - containerPort: 8080
           env:
