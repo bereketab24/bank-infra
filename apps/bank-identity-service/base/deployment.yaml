@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bank-identity
-          image: bereketab24/bank-identity:v0.0.1
+          image: bereketab24/bank-identity:v0.0.2
           ports:
             - containerPort: 8080
           env:
