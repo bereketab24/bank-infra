@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: jenkins-pv
+  namespace: jenkins
 spec:
   storageClassName: jenkins-pv
   accessModes:
@@ -18,4 +19,4 @@ kind: StorageClass
 metadata:
   name: jenkins-pv
 provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
