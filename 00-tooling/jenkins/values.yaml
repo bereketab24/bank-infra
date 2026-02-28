@@ -2,7 +2,8 @@ controller:
   serviceType: NodePort
   servicePort: 8080
   nodePort: 32000
-  adminPassword: "admin" #Proper secret handling to be implemented
+  admin:
+    Password: "admin" #Proper secret handling to be implemented
   image:
     registry: docker.io
     repository: jenkins/jenkins
