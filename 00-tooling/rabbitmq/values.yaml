@@ -1,6 +1,7 @@
 auth:
   username: guest
   password: guest #use k8s secret in prod
+  erlangCookie: "my-super-secret-local-erlang-cookie-123"
 
 image:
   registry: docker.io
@@ -16,6 +17,3 @@ persistence:
 extraSecrets: {}
 metrics:
   enabled: true
-extraEnvVars:
-  - name: BITNAMI_DEBUG
-    value: "true"
