@@ -33,4 +33,4 @@ patches:
                   - name: SPRING_DATASOURCE_USERNAME
                     value: ledger
                   - name: SPRING_DATASOURCE_PASSWORD
-                    value: |)rR){N@,S^Hk7hK[fDCA[_X
+                    value: "|)rR){N@,S^Hk7hK[fDCA[_X"
