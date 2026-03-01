@@ -28,6 +28,8 @@ controller:
     - kubernetes:latest
     - workflow-aggregator:latest
     - git:latest
+    - github:latest
+    - github-branch-source:latest
     - pipeline-stage-view:latest
     - docker-workflow:latest
     - gradle:latest

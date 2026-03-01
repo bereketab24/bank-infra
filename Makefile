@@ -129,10 +129,18 @@ install-jenkins: ## Install Jenkins
 				--wait
 access-jenkins: ##Open Jenkins via NodePort
 		@printf "%b\n" "$(CYAN)Jenkins available at http://$$(minikube ip -p $(CLUSTER_NAME)):32000$(RESET)"
-		@printf "%b\n" "$(CYAN)Admin Password: $(RESET)"
-		@kubectl get secret -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 -d && echo ""
 		@printf "%b\n" "$(CYAN)Admin Username: $(RESET)"
 		@kubectl get secret -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-user}" | base64 -d && echo ""
+		@printf "%b\n" "$(CYAN)Admin Password: $(RESET)"
+		@kubectl get secret -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 -d && echo ""
+		@printf "%b\n" "$(CYAN)=======================================================$(RESET)"
+		@printf "%b\n" "$(CYAN)Ngrok will now take over this terminal window.$(RESET)"
+		@printf "%b\n" "$(CYAN)Make sure you have Ngrok account and authenticated via 'ngrok config add-authtoken <your-auth-token>'$(RESET)"
+		@printf "%b\n" "$(CYAN)Copy the Forwarding HTTPS URL and paste it into GitHub!$(RESET)"
+		@printf "%b\n" "$(CYAN)=======================================================$(RESET)"
+		@ngrok http $$(minikube ip -p $(CLUSTER_NAME)):32000
+
+
 access-grafana: ##Open Grafana UI
 		@export POD_NAME=$(kubectl --namespace monitoring get pod -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=monitoring" -oname)
 		kubectl --namespace monitoring port-forward $POD_NAME 3000
