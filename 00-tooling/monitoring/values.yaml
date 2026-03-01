@@ -15,3 +15,5 @@ kube-state-metrics:
 prometheusOperator:
   admissionWebhooks:
     enabled: false
+  tls:
+    enabled: false
