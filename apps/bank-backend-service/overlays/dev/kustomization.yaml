@@ -3,6 +3,9 @@ kind: Kustomization
 resources:
   - ../../base
 namespace: dev
+images:
+  - name: bereketab24/bank-bff
+    newTag: "v0.0.2"
 
 patches:
   - target:

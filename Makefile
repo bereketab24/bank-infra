@@ -127,12 +127,13 @@ install-jenkins: ## Install Jenkins
 				--namespace jenkins \
 				-- values 00-tooling/jenkins/values.yaml \
 				--wait
-access-jenkins: ##Open Jenkins via NodePort
+access-jenkins-local: ## Open Jenkins via NodePort
 		@printf "%b\n" "$(CYAN)Jenkins available at http://$$(minikube ip -p $(CLUSTER_NAME)):32000$(RESET)"
-		@printf "%b\n" "$(CYAN)Admin Username: $(RESET)"
+		@printf "%b" "$(CYAN)Admin Username: $(RESET)"
 		@kubectl get secret -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-user}" | base64 -d && echo ""
-		@printf "%b\n" "$(CYAN)Admin Password: $(RESET)"
+		@printf "%b" "$(CYAN)Admin Password: $(RESET)"
 		@kubectl get secret -n jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 -d && echo ""
+access-jenkins-ngrok: ## Expose Jenkins to the internet via Ngrok. Make sure to close the connection after completing since it's not safe if your credentials are not strong.
 		@printf "%b\n" "$(CYAN)=======================================================$(RESET)"
 		@printf "%b\n" "$(CYAN)Ngrok will now take over this terminal window.$(RESET)"
 		@printf "%b\n" "$(CYAN)Make sure you have Ngrok account and authenticated via 'ngrok config add-authtoken <your-auth-token>'$(RESET)"
@@ -141,7 +142,7 @@ access-jenkins: ##Open Jenkins via NodePort
 		@ngrok http $$(minikube ip -p $(CLUSTER_NAME)):32000
 
 
-access-grafana: ##Open Grafana UI
+access-grafana: ## Open Grafana UI
 		@export POD_NAME=$(kubectl --namespace monitoring get pod -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=monitoring" -oname)
 		kubectl --namespace monitoring port-forward $POD_NAME 3000
 		kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo

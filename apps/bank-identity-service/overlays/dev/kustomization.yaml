@@ -4,6 +4,10 @@ resources:
   - ../../base
 namespace: dev
 
+images:
+  - name: bereketab24/bank-identity
+    newTag: "v0.0.2"
+
 patches:
   - target:
         kind: Deployment

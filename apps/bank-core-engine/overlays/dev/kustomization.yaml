@@ -5,6 +5,10 @@ resources:
   - ../../base
 namespace: dev
 
+images:
+  - name: bereketab24/bank-core
+    newTag: "v.0.0.2"
+
 patches:
   - target:
         kind: Deployment
