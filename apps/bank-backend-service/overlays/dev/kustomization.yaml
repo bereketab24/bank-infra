@@ -7,9 +7,6 @@ images:
 - name: bereketab24/bank-bff
   newName: bereketab24/bank-bff
   newTag: 9c75cd5
-- name: bereketab24/bank-core
-  newName: bereketab24/bank-core
-  newTag: 4a40647
 
 patches:
 - patch: |-
