@@ -1,38 +1,39 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../base
+- ../../base
 namespace: dev
 
 images:
-  - name: bereketab24/bank-identity
-    newTag: "v0.0.2"
+- name: bereketab24/bank-identity
+  newName: bereketab24/bank-identity
+  newTag: c37e127
 
 patches:
-  - target:
-        kind: Deployment
-        name: bank-identity
-    patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: bank-identity
-      spec:
-        replicas: 1
-        template:
-          spec:
-            containers:
-              - name: bank-identity
-                resources:
-                  requests:
-                    cpu: 100m
-                    memory: 128Mi
-                env:
-                  - name: SPRING_PROFILES_ACTIVE
-                    value: dev
-                  - name: SPRING_DATASOURCE_URL
-                    value: jdbc:postgresql://user-db-primary.postgres.svc:5432/user-db
-                  - name: SPRING_DATASOURCE_USERNAME
-                    value: identity
-                  - name: SPRING_DATASOURCE_PASSWORD
-                    value: fa/u8Pw=sA8;Ak{<cT/6_|p+
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: bank-identity
+    spec:
+      replicas: 1
+      template:
+        spec:
+          containers:
+            - name: bank-identity
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: dev
+                - name: SPRING_DATASOURCE_URL
+                  value: jdbc:postgresql://user-db-primary.postgres.svc:5432/user-db
+                - name: SPRING_DATASOURCE_USERNAME
+                  value: identity
+                - name: SPRING_DATASOURCE_PASSWORD
+                  value: fa/u8Pw=sA8;Ak{<cT/6_|p+
+  target:
+    kind: Deployment
+    name: bank-identity
