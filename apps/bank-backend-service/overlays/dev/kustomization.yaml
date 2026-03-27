@@ -1,31 +1,32 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../base
+- ../../base
 namespace: dev
 images:
-  - name: bereketab24/bank-bff
-    newTag: "v0.0.2"
+- name: bereketab24/bank-bff
+  newName: bereketab24/bank-bff
+  newTag: 3ca74c6
 
 patches:
-  - target:
-      kind: Deployment
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
       name: bank-backend-service
-    patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: bank-backend-service
-      spec:
-        replicas: 1
-        template:
-          spec:
-            containers:
-              - name: bank-bff
-                resources:
-                  requests:
-                    cpu: 100m
-                    memory: 128Mi
-                env:
-                  - name: SPRING_PROFILES_ACTIVE
-                    value: dev
+    spec:
+      replicas: 1
+      template:
+        spec:
+          containers:
+            - name: bank-bff
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+              env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: dev
+  target:
+    kind: Deployment
+    name: bank-backend-service
