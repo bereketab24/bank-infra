@@ -6,7 +6,7 @@ namespace: dev
 images:
 - name: bereketab24/bank-bff
   newName: bereketab24/bank-bff
-  newTag: 3ca74c6
+  newTag: 9c75cd5
 
 patches:
 - patch: |-
